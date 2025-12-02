@@ -1,4 +1,4 @@
-"use client"; // Make this a client component because ThemeProvider and Sidebar are client-only
+"use client";
 
 import "./globals.css";
 import {

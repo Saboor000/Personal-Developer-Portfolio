@@ -111,6 +111,31 @@ export function TotalVisitorsChart() {
     }
   }, [timeRange]);
 
+  // Adjust area opacity when theme changes (detect html.dark class)
+  const [areaOpacity, setAreaOpacity] = useState(0.45);
+
+  useEffect(() => {
+    const update = () => {
+      const isDark =
+        typeof document !== "undefined" &&
+        document.documentElement.classList.contains("dark");
+      setAreaOpacity(isDark ? 0.6 : 0.45);
+    };
+
+    update();
+
+    // Observe changes to html.class to react to theme toggles
+    const observer = new MutationObserver(() => update());
+    if (typeof document !== "undefined" && document.documentElement) {
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   // Responsive SVG dimensions
   const width = Math.max(containerWidth, 300);
   const height = containerWidth < 640 ? 250 : 300;
@@ -156,7 +181,7 @@ export function TotalVisitorsChart() {
         <div
           ref={containerRef}
           className="w-full overflow-hidden rounded-md bg-card p-2 sm:p-4"
-          style={{ backgroundColor: "hsl(var(--color-card))" }}
+          style={{ backgroundColor: "var(--color-card)" }}
         >
           <svg
             viewBox={`0 0 ${width} ${height}`}
@@ -169,13 +194,13 @@ export function TotalVisitorsChart() {
               <linearGradient id="gradVisitors" x1="0" x2="0" y1="0" y2="1">
                 <stop
                   offset="0%"
-                  stopColor="hsl(var(--color-primary))"
-                  stopOpacity="0.28"
+                  stopColor="var(--color-primary)"
+                  stopOpacity={areaOpacity}
                 />
                 <stop
                   offset="100%"
-                  stopColor="hsl(var(--color-primary))"
-                  stopOpacity="0"
+                  stopColor="var(--color-primary)"
+                  stopOpacity={0}
                 />
               </linearGradient>
             </defs>
@@ -188,8 +213,8 @@ export function TotalVisitorsChart() {
                 x2={width}
                 y1={t * height}
                 y2={t * height}
-                stroke="hsl(var(--color-border))"
-                strokeOpacity={0.25}
+                stroke="var(--color-border)"
+                strokeOpacity={0.22}
               />
             ))}
 
@@ -200,8 +225,8 @@ export function TotalVisitorsChart() {
             <path
               d={path}
               fill="none"
-              stroke="hsl(var(--color-primary))"
-              strokeWidth={2}
+              stroke="var(--color-primary)"
+              strokeWidth={2.5}
               strokeLinejoin="round"
               strokeLinecap="round"
             />
@@ -215,7 +240,7 @@ export function TotalVisitorsChart() {
                   key={i}
                   x={x}
                   y={height - 6}
-                  fill="hsl(var(--color-muted-foreground))"
+                  fill="var(--color-muted-foreground)"
                   fontSize={fontSize}
                   textAnchor="middle"
                 >
