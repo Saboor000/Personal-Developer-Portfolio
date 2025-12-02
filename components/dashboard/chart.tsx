@@ -1,258 +1,146 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import * as React from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-type Point = { date: string; visitors: number };
+// Render a dependency-free bar chart (two series) as an SVG that scales responsively.
+export default function TotalVisitorsChart() {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+  const desktop = [180, 320, 240, 80, 220, 240];
+  const mobile = [80, 180, 160, 120, 140, 120];
 
-const data3Months: Point[] = [
-  { date: "Apr 3", visitors: 2400 },
-  { date: "Apr 9", visitors: 1398 },
-  { date: "Apr 15", visitors: 9800 },
-  { date: "Apr 21", visitors: 3908 },
-  { date: "Apr 27", visitors: 4800 },
-  { date: "May 3", visitors: 3800 },
-  { date: "May 9", visitors: 4300 },
-  { date: "May 16", visitors: 2000 },
-  { date: "May 23", visitors: 9490 },
-  { date: "May 30", visitors: 3490 },
-  { date: "Jun 5", visitors: 4300 },
-  { date: "Jun 11", visitors: 2100 },
-  { date: "Jun 17", visitors: 8200 },
-  { date: "Jun 23", visitors: 3200 },
-  { date: "Jun 30", visitors: 4200 },
-];
+  // chart sizing in SVG coordinates
+  const width = 700;
+  const height = 320;
+  const padding = { top: 24, right: 20, bottom: 48, left: 36 };
+  const chartWidth = width - padding.left - padding.right;
+  const chartHeight = height - padding.top - padding.bottom;
 
-const data30Days: Point[] = [
-  { date: "Jun 1", visitors: 2400 },
-  { date: "Jun 7", visitors: 1398 },
-  { date: "Jun 13", visitors: 9800 },
-  { date: "Jun 19", visitors: 3908 },
-  { date: "Jun 25", visitors: 4800 },
-  { date: "Jun 30", visitors: 3800 },
-];
+  const maxValue = Math.max(...desktop, ...mobile);
 
-const data7Days: Point[] = [
-  { date: "Jun 24", visitors: 2400 },
-  { date: "Jun 25", visitors: 1398 },
-  { date: "Jun 26", visitors: 9800 },
-  { date: "Jun 27", visitors: 3908 },
-  { date: "Jun 28", visitors: 4800 },
-  { date: "Jun 29", visitors: 3800 },
-  { date: "Jun 30", visitors: 4300 },
-];
-
-function buildPath(
-  points: Point[],
-  width: number,
-  height: number,
-  padding = 16
-) {
-  if (!points.length) return { path: "", area: "" };
-
-  const values = points.map((p) => p.visitors);
-  const max = Math.max(...values);
-  const min = Math.min(...values);
-  const range = max - min || 1;
-
-  const stepX = (width - padding * 2) / Math.max(1, points.length - 1);
-
-  const coords = points.map((p, i) => {
-    const x = padding + i * stepX;
-    const y =
-      padding + (1 - (p.visitors - min) / range) * (height - padding * 2);
-    return { x, y };
-  });
-
-  const path = coords
-    .map((c, i) => `${i === 0 ? "M" : "L"} ${c.x.toFixed(2)} ${c.y.toFixed(2)}`)
-    .join(" ");
-  const first = coords[0];
-  const last = coords[coords.length - 1];
-  const area = `${path} L ${last.x.toFixed(2)} ${
-    height - padding
-  } L ${first.x.toFixed(2)} ${height - padding} Z`;
-
-  return { path, area };
-}
-
-export function TotalVisitorsChart() {
-  const [timeRange, setTimeRange] = useState<"3m" | "30d" | "7d">("3m");
-  const [containerWidth, setContainerWidth] = useState(1000);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
-    };
-
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
-
-  const data = useMemo(() => {
-    switch (timeRange) {
-      case "30d":
-        return data30Days;
-      case "7d":
-        return data7Days;
-      default:
-        return data3Months;
-    }
-  }, [timeRange]);
-
-  // Adjust area opacity when theme changes (detect html.dark class)
-  const [areaOpacity, setAreaOpacity] = useState(0.45);
-
-  useEffect(() => {
-    const update = () => {
-      const isDark =
-        typeof document !== "undefined" &&
-        document.documentElement.classList.contains("dark");
-      setAreaOpacity(isDark ? 0.6 : 0.45);
-    };
-
-    update();
-
-    // Observe changes to html.class to react to theme toggles
-    const observer = new MutationObserver(() => update());
-    if (typeof document !== "undefined" && document.documentElement) {
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["class"],
-      });
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  // Responsive SVG dimensions
-  const width = Math.max(containerWidth, 300);
-  const height = containerWidth < 640 ? 250 : 300;
-
-  const { path, area } = buildPath(data, width, height, 20);
+  // compute positions
+  const groups = months.length;
+  const groupWidth = chartWidth / groups;
+  const barWidth = Math.min(32, groupWidth * 0.35);
 
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4">
-        <div>
-          <CardTitle>Total Visitors</CardTitle>
-          <CardDescription>Total for the last 3 months</CardDescription>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <Button
-            variant={timeRange === "3m" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setTimeRange("3m")}
-            className="text-xs w-full sm:w-auto"
-          >
-            Last 3 months
-          </Button>
-          <Button
-            variant={timeRange === "30d" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setTimeRange("30d")}
-            className="text-xs w-full sm:w-auto"
-          >
-            Last 30 days
-          </Button>
-          <Button
-            variant={timeRange === "7d" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setTimeRange("7d")}
-            className="text-xs w-full sm:w-auto"
-          >
-            Last 7 days
-          </Button>
-        </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Total Revenue</CardTitle>
       </CardHeader>
-
       <CardContent>
-        <div
-          ref={containerRef}
-          className="w-full overflow-hidden rounded-md bg-card p-2 sm:p-4"
-          style={{ backgroundColor: "var(--color-card)" }}
-        >
+        <div className="w-full h-80">
           <svg
             viewBox={`0 0 ${width} ${height}`}
             width="100%"
-            preserveAspectRatio="xMidYMid meet"
-            className="min-h-[250px] sm:min-h-[300px]"
-            style={{ height: "auto" }}
+            height="100%"
+            preserveAspectRatio="none"
           >
             <defs>
-              <linearGradient id="gradVisitors" x1="0" x2="0" y1="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor="var(--color-primary)"
-                  stopOpacity={areaOpacity}
-                />
-                <stop
-                  offset="100%"
-                  stopColor="var(--color-primary)"
-                  stopOpacity={0}
-                />
+              <linearGradient id="grad-blue" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor="#2563eb" stopOpacity="0.95" />
+                <stop offset="100%" stopColor="#2563eb" stopOpacity="0.2" />
               </linearGradient>
+              <linearGradient id="grad-purple" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.95" />
+                <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.2" />
+              </linearGradient>
+              <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow
+                  dx="0"
+                  dy="6"
+                  stdDeviation="8"
+                  floodColor="#000"
+                  floodOpacity="0.35"
+                />
+              </filter>
             </defs>
 
-            {/* grid lines */}
-            {[0.25, 0.5, 0.75].map((t) => (
-              <line
-                key={t}
-                x1={0}
-                x2={width}
-                y1={t * height}
-                y2={t * height}
-                stroke="var(--color-border)"
-                strokeOpacity={0.22}
-              />
-            ))}
-
-            {/* area */}
-            <path d={area} fill="url(#gradVisitors)" stroke="none" />
-
-            {/* stroke path */}
-            <path
-              d={path}
-              fill="none"
-              stroke="var(--color-primary)"
-              strokeWidth={2.5}
-              strokeLinejoin="round"
-              strokeLinecap="round"
-            />
-
-            {/* x labels */}
-            {data.map((p, i) => {
-              const x = 20 + (i * (width - 40)) / Math.max(1, data.length - 1);
-              const fontSize = containerWidth < 640 ? 10 : 12;
+            {/* y axis grid lines */}
+            {[0, 0.25, 0.5, 0.75, 1].map((t, i) => {
+              const y = padding.top + chartHeight - t * chartHeight;
+              const value = Math.round(t * maxValue);
               return (
-                <text
-                  key={i}
-                  x={x}
-                  y={height - 6}
-                  fill="var(--color-muted-foreground)"
-                  fontSize={fontSize}
-                  textAnchor="middle"
-                >
-                  {p.date}
-                </text>
+                <g key={i}>
+                  <line
+                    x1={padding.left}
+                    x2={width - padding.right}
+                    y1={y}
+                    y2={y}
+                    stroke="rgba(255,255,255,0.04)"
+                  />
+                  <text
+                    x={8}
+                    y={y + 4}
+                    fontSize={10}
+                    fill="rgba(255,255,255,0.45)"
+                  >
+                    {value}
+                  </text>
+                </g>
               );
             })}
+
+            {/* bars */}
+            {months.map((m, i) => {
+              const groupX = padding.left + i * groupWidth + groupWidth / 2;
+              const dH = chartHeight - (desktop[i] / maxValue) * chartHeight;
+              const mH = chartHeight - (mobile[i] / maxValue) * chartHeight;
+              const dY = padding.top + dH;
+              const mY = padding.top + mH;
+              return (
+                <g key={m}>
+                  <rect
+                    x={groupX - barWidth - 4}
+                    y={dY}
+                    width={barWidth}
+                    height={chartHeight - dH}
+                    fill="#2563eb"
+                    rx={4}
+                  />
+                  <rect
+                    x={groupX + 4}
+                    y={mY}
+                    width={barWidth}
+                    height={chartHeight - mH}
+                    fill="#7c3aed"
+                    rx={4}
+                  />
+                  {/* month label */}
+                  <text
+                    x={groupX}
+                    y={height - 12}
+                    fontSize={11}
+                    textAnchor="middle"
+                    fill="rgba(255,255,255,0.65)"
+                  >
+                    {m}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* legend */}
+            <g transform={`translate(${padding.left}, ${height - 6})`}>
+              <rect x={0} y={-28} width={12} height={8} rx={2} fill="#2563eb" />
+              <text x={18} y={-22} fontSize={11} fill="rgba(255,255,255,0.75)">
+                Desktop
+              </text>
+              <rect
+                x={110}
+                y={-28}
+                width={12}
+                height={8}
+                rx={2}
+                fill="#7c3aed"
+              />
+              <text x={128} y={-22} fontSize={11} fill="rgba(255,255,255,0.75)">
+                Mobile
+              </text>
+            </g>
           </svg>
         </div>
       </CardContent>
     </Card>
   );
 }
-
-export default TotalVisitorsChart;

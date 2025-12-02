@@ -1,14 +1,9 @@
-"use client";
+"use client"; // Make this a client component because ThemeProvider and Sidebar are client-only
 
 import "./globals.css";
-import {
-  SidebarProvider,
-  SidebarTrigger,
-  SidebarInset,
-} from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import ThemeToggle from "@/components/ui/theme-toggle";
 
 export default function RootLayout({
   children,
@@ -18,6 +13,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        {/* ThemeProvider should wrap everything that needs theme context */}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -26,13 +22,10 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <AppSidebar />
-            <SidebarInset>
-              <div className="flex justify-end items-center px-4 py-3">
-                <ThemeToggle />
-              </div>
+            <main>
               <SidebarTrigger />
               {children}
-            </SidebarInset>
+            </main>
           </SidebarProvider>
         </ThemeProvider>
       </body>

@@ -1,9 +1,5 @@
 "use client";
-import * as React from "react";
-import {
-  ColumnDef,
-  
-} from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -81,9 +77,7 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <div className="capitalize text-xs sm:text-sm">
-        {row.getValue("status")}
-      </div>
+      <div className="capitalize">{row.getValue("status")}</div>
     ),
   },
   {
@@ -99,11 +93,7 @@ export const columns: ColumnDef<Payment>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase text-xs sm:text-sm truncate max-w-[100px] sm:max-w-none">
-        {row.getValue("email")}
-      </div>
-    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
     accessorKey: "amount",
@@ -115,11 +105,7 @@ export const columns: ColumnDef<Payment>[] = [
         style: "currency",
         currency: "USD",
       }).format(amount);
-      return (
-        <div className="text-right font-medium text-xs sm:text-sm">
-          {formatted}
-        </div>
-      );
+      return <div className="text-right font-medium">{formatted}</div>;
     },
   },
   {

@@ -51,7 +51,7 @@ export function DataTable<TData extends RowData, TValue>({
   return (
     <div className="w-full overflow-hidden rounded-md border">
       {/* Search Input */}
-      <div className="p-2 sm:p-4">
+      <div className="p-2 sm:p-3">
         <Input
           placeholder={searchPlaceholder}
           value={globalFilter ?? ""}
@@ -109,7 +109,7 @@ export function DataTable<TData extends RowData, TValue>({
       </div>
 
       {/* Pagination */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-2 sm:p-4 text-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-2 sm:p-3 text-sm">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
           <div className="flex gap-2">
             <Button
