@@ -1,14 +1,13 @@
 "use client";
 
-import * as React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export default function BottomInsights() {
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
+        <Card className="h-[335px] ">
+          <CardHeader className="pt-8">
             <CardTitle>Quick Insights</CardTitle>
           </CardHeader>
           <CardContent>
@@ -37,7 +36,7 @@ export default function BottomInsights() {
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="pt-8">
             <CardTitle>Activity (last 7 days)</CardTitle>
           </CardHeader>
           <CardContent>

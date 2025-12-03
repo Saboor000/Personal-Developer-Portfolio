@@ -4,7 +4,6 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -12,7 +11,6 @@ import {
 export function CardDemo() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {/* Total Revenue */}
       <Card>
         <CardHeader>
           <div>
@@ -51,7 +49,6 @@ export function CardDemo() {
         </CardContent>
       </Card>
 
-      {/* New Customers */}
       <Card>
         <CardHeader>
           <div>
@@ -90,7 +87,6 @@ export function CardDemo() {
         </CardContent>
       </Card>
 
-      {/* Active Accounts */}
       <Card>
         <CardHeader>
           <div>
@@ -129,7 +125,6 @@ export function CardDemo() {
         </CardContent>
       </Card>
 
-      {/* Growth Rate */}
       <Card>
         <CardHeader>
           <div>

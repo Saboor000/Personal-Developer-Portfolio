@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// Simple avatar fallback using inline styles (no dependency on a dedicated Avatar component)
 
 type Tx = { id: string; title: string; amount: string; avatar?: string };
 

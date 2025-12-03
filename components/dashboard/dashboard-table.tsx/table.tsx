@@ -50,7 +50,6 @@ export function DataTable<TData extends RowData, TValue>({
 
   return (
     <div className="w-full overflow-hidden rounded-md border">
-      {/* Search Input */}
       <div className="p-2 sm:p-3">
         <Input
           placeholder={searchPlaceholder}
@@ -60,7 +59,6 @@ export function DataTable<TData extends RowData, TValue>({
         />
       </div>
 
-      {/* Table - Responsive wrapper */}
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -108,7 +106,6 @@ export function DataTable<TData extends RowData, TValue>({
         </Table>
       </div>
 
-      {/* Pagination */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-2 sm:p-3 text-sm">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
           <div className="flex gap-2">

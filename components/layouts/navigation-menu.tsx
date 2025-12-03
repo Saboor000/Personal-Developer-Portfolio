@@ -63,7 +63,6 @@ export function NavigationMenuDemo() {
   return (
     <NavigationMenu viewport={isMobile} className="w-auto ">
       <NavigationMenuList className="flex-wrap justify-center">
-        {/* Dashboard Menu */}
         <NavigationMenuItem>
           <NavigationMenuTrigger>Dashboard</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -81,7 +80,6 @@ export function NavigationMenuDemo() {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        {/* Components Menu */}
         <NavigationMenuItem>
           <NavigationMenuTrigger>Components</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -99,14 +97,12 @@ export function NavigationMenuDemo() {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        {/* Docs */}
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link href="/docs">Docs</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
 
-        {/* Services */}
         <NavigationMenuItem className="hidden md:block">
           <NavigationMenuTrigger>Services</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -124,7 +120,6 @@ export function NavigationMenuDemo() {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        {/* Learning */}
         <NavigationMenuItem className="hidden md:block">
           <NavigationMenuTrigger>Tutorials</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -142,7 +137,6 @@ export function NavigationMenuDemo() {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        {/* Icon-based Menu */}
         <NavigationMenuItem className="hidden md:block">
           <NavigationMenuTrigger>Quick Links</NavigationMenuTrigger>
           <NavigationMenuContent>

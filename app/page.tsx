@@ -1,6 +1,6 @@
 import Dashboard from "@/components/dashboard/dashboard";
 import { BreadcrumbWithDropdown } from "@/components/layouts/breadcrumb";
-import { NavigationMenuDemo } from "@/components/layouts/navigation-menu";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const metadata = {
   title: "Dashboard",
@@ -11,10 +11,11 @@ export { metadata };
 export default function Home() {
   return (
     <div className="w-full">
-      <div className="flex items-center justify-center">
+      {/* <div className="flex items-center justify-center">
         <NavigationMenuDemo />
-      </div>
-      <div className="my-8 mx-10">
+      </div> */}
+      <div className="mx-10 flex items-center gap-4">
+        <SidebarTrigger />
         <BreadcrumbWithDropdown />
       </div>
 
