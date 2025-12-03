@@ -4,6 +4,7 @@ import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import ThemeToggle from "@/components/ui/theme-toggle";
 
 export default function RootLayout({
   children,
@@ -23,6 +24,9 @@ export default function RootLayout({
           <SidebarProvider>
             <AppSidebar />
             <main>
+              <div className="flex justify-end items-center px-4 py-3">
+                <ThemeToggle />
+              </div>
               <SidebarTrigger />
               {children}
             </main>
