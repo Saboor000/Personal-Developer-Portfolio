@@ -3,15 +3,15 @@
 import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type Tx = { id: string; title: string; amount: string; avatar?: string };
+import { transactions as centralTransactions } from "./data";
 
-const transactions: Tx[] = [
-  { id: "t1", title: "Subscription Renewal", amount: "1.4K" },
-  { id: "t2", title: "Payment for Services", amount: "2.1K" },
-  { id: "t3", title: "Subscription Renewal", amount: "1.3K" },
-  { id: "t4", title: "Payment for Services", amount: "2.5K" },
-  { id: "t5", title: "Subscription Renewal", amount: "1.4K" },
-];
+type Tx = { id: string; title: string; amount: number; avatar?: string };
+
+const transactions: Tx[] = centralTransactions;
+const compact = new Intl.NumberFormat("en-US", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
 
 export default function LatestTransactions() {
   return (
@@ -35,7 +35,9 @@ export default function LatestTransactions() {
                   <div className="text-xs text-muted-foreground">{t.id}</div>
                 </div>
               </div>
-              <div className="text-sm font-semibold">{t.amount}</div>
+              <div className="text-sm font-semibold">
+                {compact.format(t.amount)}
+              </div>
             </div>
           ))}
         </div>

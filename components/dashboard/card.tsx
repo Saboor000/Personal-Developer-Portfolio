@@ -7,6 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { totals } from "./data";
+
+const currency = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
 
 export function CardDemo() {
   return (
@@ -19,13 +25,16 @@ export function CardDemo() {
           </div>
           <CardAction>
             <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-[11px] font-medium text-foreground">
-              ▲ 12.5%
+              {totals.revenueChange >= 0 ? "▲ " : "▼ "}
+              {Math.abs(totals.revenueChange)}%
             </span>
           </CardAction>
         </CardHeader>
         <CardContent>
           <div className="p-4">
-            <div className="text-3xl sm:text-4xl font-extrabold">$1,250.00</div>
+            <div className="text-3xl sm:text-4xl font-extrabold">
+              {currency.format(totals.totalRevenue)}
+            </div>
             <div className="mt-3 font-semibold">Trending up this month</div>
             <div className="text-sm text-muted-foreground mt-2">
               Visitors for the last 6 months
@@ -57,13 +66,16 @@ export function CardDemo() {
           </div>
           <CardAction>
             <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-[11px] font-medium text-foreground">
-              ▼ -20%
+              {totals.customersChange >= 0 ? "▲ " : "▼ "}
+              {Math.abs(totals.customersChange)}%
             </span>
           </CardAction>
         </CardHeader>
         <CardContent>
           <div className="p-4">
-            <div className="text-3xl sm:text-4xl font-extrabold">1,234</div>
+            <div className="text-3xl sm:text-4xl font-extrabold">
+              {totals.newCustomers.toLocaleString()}
+            </div>
             <div className="mt-3 font-semibold">Down 20% this period</div>
             <div className="text-sm text-muted-foreground mt-2">
               Acquisition needs attention
@@ -95,13 +107,16 @@ export function CardDemo() {
           </div>
           <CardAction>
             <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-[11px] font-medium text-foreground">
-              ▲ 12.5%
+              {totals.accountsChange >= 0 ? "▲ " : "▼ "}
+              {Math.abs(totals.accountsChange)}%
             </span>
           </CardAction>
         </CardHeader>
         <CardContent>
           <div className="p-4">
-            <div className="text-3xl sm:text-4xl font-extrabold">45,678</div>
+            <div className="text-3xl sm:text-4xl font-extrabold">
+              {totals.activeAccounts.toLocaleString()}
+            </div>
             <div className="mt-3 font-semibold">Strong user retention</div>
             <div className="text-sm text-muted-foreground mt-2">
               Engagement exceed targets
@@ -133,13 +148,16 @@ export function CardDemo() {
           </div>
           <CardAction>
             <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-[11px] font-medium text-foreground">
-              ▲ 4.5%
+              {totals.growthChange >= 0 ? "▲ " : "▼ "}
+              {Math.abs(totals.growthChange)}%
             </span>
           </CardAction>
         </CardHeader>
         <CardContent>
           <div className="p-4">
-            <div className="text-3xl sm:text-4xl font-extrabold">4.5%</div>
+            <div className="text-3xl sm:text-4xl font-extrabold">
+              {totals.growthRate}%
+            </div>
             <div className="mt-3 font-semibold">
               Steady performance increase
             </div>

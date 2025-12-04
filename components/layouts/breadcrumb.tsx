@@ -45,7 +45,7 @@ export function BreadcrumbWithDropdown() {
           <SlashIcon />
         </BreadcrumbSeparator>
         <BreadcrumbItem>
-          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+          <BreadcrumbPage>Dashboard</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
